@@ -1,6 +1,6 @@
 # Zoneminder Base with Cuda
 
-This project is a modified docker image of [zoneminder-base docker image](https://github.com/zoneminder-containers/zoneminder-base). The only change is that ffmpeg is compiled with cuda enabled and then updated zoneminder config to use that ffmpeg.
+This is a modified docker image of [zoneminder-base docker image](https://github.com/zoneminder-containers/zoneminder-base). The only change is that ffmpeg is compiled with cuda enabled and then updated zoneminder config.
 
 ## Disclaimer
 
@@ -10,16 +10,20 @@ This is just a hobby project of mine and have no plans of maintaining this. Upda
 
 ### Pre-requisite
 
-Make sure you already have docker installed with nvidia container toolkit. Here's the [guide from nvidia documentation](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html). You will also need an nvidia graphics card with cuda capability.
+Make sure you already have docker installed with nvidia container toolkit. Here's [nvidia documentation](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html) if you haven't installed it yet.
+You will also need an nvidia graphics card. A more recently released GPU is preferrable but it does not necessarily need a strong one. I use a GTX 1660 Super with 4 cameras and it is heavily under-utilized.
 
 ### Zoneminder version
 
 Update the first line of the Dockerfile to use whichever zoneminder version you want to use.
 
 ### Arguments
- - NV_CODEC_VERSION - the version used for ffmpeg nv_codec header. List of versions can be seen on [ffmpeg/nv-codec-headers github releases](https://github.com/FFmpeg/nv-codec-headers/releases/)
- - FFMPEG_VERSION - the ffmpeg version that will be compiled from scratch
- - FFMPEG_PATH - path where ffmpeg binaries will be stored
+The following new arguments are added:
+ - `NV_CODEC_VERSION` - the version used for ffmpeg nv_codec header. List of versions can be seen on [ffmpeg/nv-codec-headers github releases](https://github.com/FFmpeg/nv-codec-headers/releases/)
+ - `FFMPEG_VERSION` - the ffmpeg version that will be compiled from scratch
+ - `FFMPEG_PATH` - path where ffmpeg binaries will be stored
+
+This might also support the arguments in [zoneminder-base](https://github.com/zoneminder-containers/zoneminder-base) but I haven't tested it yet.
 
 ### Note
 
@@ -27,4 +31,4 @@ I was not able to confirm if compiling this image from scratch will also update 
 
 ## Docker Compose
 
-Included `compose.example.yaml` includes how to compile and run the zoneminder with a mariadb backend server. Update the compose file and other config files (01-databases.sql and .env) to use the correct credentials.
+Included `compose.example.yaml` includes how to setup a zoneminder image with a mariadb backend server. Create a copy of the compose file `compose.example.yaml` and other config files (`01-databases.sql` and `.env`) to use the correct db credentials.

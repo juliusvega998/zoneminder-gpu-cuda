@@ -1,0 +1,54 @@
+#This is just an example of docker compose file for the docker image.
+#Create a copy of this file to compose.yaml or add the following to an existing compose.yaml and modify as you see fit
+services:
+  db:
+    image: mariadb
+    restart: always
+    networks:
+      - mariadb
+    volumes:
+      - /path/to/db:/var/lib/mysql
+      - /path/to/dbinit:/docker-entrypoint-initdb.d
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+    deploy:
+      resources:
+        limits:
+          cpus: 1
+
+  zoneminder:
+    image: zoneminder-gpu-cuda
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    restart: always
+    runtime: 'nvidia'
+    stop_grace_period: 45s
+    depends_on:
+      - db
+    ports:
+      - 8080:80
+    networks:
+      - mariadb
+    volumes:
+      - /path/to/config:/config
+      - /path/to/data:/data
+      - /path/to/log:/log
+      - type: tmpfs
+        target: /dev/shm
+        tmpfs:
+          size: 1000000000 #1GB
+    env_file:
+      - ./.env
+    deploy:
+      resources:
+        limits:
+          cpus: 4
+        reservations:
+          devices:
+          - driver: nvidia
+            device_ids: ['0']
+            capabilities: [compute,utility,video,gpu]
+
+networks:
+  mariadb:

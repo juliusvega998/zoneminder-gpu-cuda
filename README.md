@@ -31,4 +31,4 @@ I was not able to confirm if compiling this image from scratch will also update 
 
 ## Docker Compose
 
-Included `compose.example.yaml` includes how to setup a zoneminder image with a mariadb backend server. Create a copy of the compose file `compose.example.yaml` and other config files (`01-databases.sql` and `.env`) to use the correct db credentials.
+Included `compose.example.yaml` shows how to setup a zoneminder with a mariadb server. Create a copy of the compose file `compose.example.yaml` and other config files (`01-databases.sql` and `.env`) to use the correct db credentials.
